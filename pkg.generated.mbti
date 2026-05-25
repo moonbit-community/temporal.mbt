@@ -1,0 +1,177 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "moonbit-community/temporal.mbt"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub type CancellationToken
+pub fn CancellationToken::cancel(Self) -> Unit
+pub fn CancellationToken::new() -> Self
+
+pub type Connection
+pub fn Connection::connect(Runtime, ConnectionOptions, (Result[Self, TemporalError]) -> Unit) -> Unit
+pub fn Connection::connect_blocking(Runtime, ConnectionOptions) -> Result[Self, TemporalError]
+pub fn Connection::rpc_call(Self, RpcCallOptions, (Result[Bytes, RpcFailure]) -> Unit) -> Unit
+pub fn Connection::rpc_call_blocking(Self, RpcCallOptions) -> Result[Bytes, RpcFailure]
+pub fn Connection::update_api_key(Self, String) -> Unit
+pub fn Connection::update_binary_metadata(Self, Bytes) -> Unit
+pub fn Connection::update_metadata(Self, Bytes) -> Unit
+
+pub(all) struct ConnectionOptions {
+  target_url : String
+  client_name : String
+  client_version : String
+  identity : String
+  api_key : String
+  metadata : Bytes
+  binary_metadata : Bytes
+} derive(Eq, @debug.Debug)
+pub fn ConnectionOptions::new(String, client_name? : String, client_version? : String, identity? : String, api_key? : String, metadata? : Bytes, binary_metadata? : Bytes) -> Self
+
+pub(all) struct DevServerOptions {
+  test_server : TestServerOptions
+  namespace_name : String
+  ip : String
+  database_filename : String
+  ui : Bool
+  ui_port : Int
+  log_format : String
+  log_level : String
+}
+pub fn DevServerOptions::default() -> Self
+
+pub type EphemeralServer
+pub fn EphemeralServer::shutdown(Self, (Result[Unit, TemporalError]) -> Unit) -> Unit
+pub fn EphemeralServer::shutdown_blocking(Self) -> Result[Unit, TemporalError]
+pub fn EphemeralServer::start_dev_server(Runtime, DevServerOptions, (Result[(Self, String), TemporalError]) -> Unit) -> Unit
+pub fn EphemeralServer::start_dev_server_blocking(Runtime, options? : DevServerOptions) -> Result[(Self, String), TemporalError]
+pub fn EphemeralServer::start_test_server(Runtime, TestServerOptions, (Result[(Self, String), TemporalError]) -> Unit) -> Unit
+pub fn EphemeralServer::start_test_server_blocking(Runtime, options? : TestServerOptions) -> Result[(Self, String), TemporalError]
+
+pub(all) struct PollerBehavior {
+  simple_maximum : Int
+} derive(Eq, @debug.Debug)
+pub fn PollerBehavior::simple_maximum(Int) -> Self
+
+pub type Random
+pub fn Random::double_range(Self, Double, Double, max_inclusive? : Bool) -> Double
+pub fn Random::fill_bytes(Self, Int) -> Bytes
+pub fn Random::int32_range(Self, Int, Int, max_inclusive? : Bool) -> Int
+pub fn Random::new(UInt64) -> Self
+
+pub(all) struct RpcCallOptions {
+  service : RpcService
+  rpc : String
+  request : Bytes
+  retry : Bool
+  metadata : Bytes
+  binary_metadata : Bytes
+  timeout_millis : UInt
+  cancellation_token : CancellationToken?
+}
+pub fn RpcCallOptions::new(RpcService, String, request? : Bytes, retry? : Bool, metadata? : Bytes, binary_metadata? : Bytes, timeout_millis? : UInt, cancellation_token? : CancellationToken) -> Self
+
+pub(all) struct RpcFailure {
+  status_code : Int
+  message : String
+  details : Bytes
+} derive(Eq, @debug.Debug)
+
+pub enum RpcService {
+  Workflow
+  Operator
+  Cloud
+  Test
+  Health
+} derive(Eq, @debug.Debug)
+
+pub type Runtime
+pub fn Runtime::new(options? : RuntimeOptions) -> Result[Self, TemporalError]
+
+pub(all) struct RuntimeOptions {
+  worker_heartbeat_interval_millis : UInt64
+} derive(Eq, @debug.Debug)
+pub fn RuntimeOptions::default() -> Self
+
+pub(all) struct TemporalError {
+  message : String
+} derive(Eq, @debug.Debug)
+
+pub(all) struct TestServerOptions {
+  existing_path : String
+  sdk_name : String
+  sdk_version : String
+  download_version : String
+  download_dest_dir : String
+  port : Int
+  extra_args : String
+  download_ttl_seconds : UInt64
+}
+pub fn TestServerOptions::default() -> Self
+
+pub type Worker
+pub fn Worker::complete_activity_task(Self, Bytes, (Result[Unit, TemporalError]) -> Unit) -> Unit
+pub fn Worker::complete_activity_task_blocking(Self, Bytes) -> Result[Unit, TemporalError]
+pub fn Worker::complete_nexus_task(Self, Bytes, (Result[Unit, TemporalError]) -> Unit) -> Unit
+pub fn Worker::complete_nexus_task_blocking(Self, Bytes) -> Result[Unit, TemporalError]
+pub fn Worker::complete_workflow_activation(Self, Bytes, (Result[Unit, TemporalError]) -> Unit) -> Unit
+pub fn Worker::complete_workflow_activation_blocking(Self, Bytes) -> Result[Unit, TemporalError]
+pub fn Worker::finalize_shutdown(Self, (Result[Unit, TemporalError]) -> Unit) -> Unit
+pub fn Worker::finalize_shutdown_blocking(Self) -> Result[Unit, TemporalError]
+pub fn Worker::initiate_shutdown(Self) -> Unit
+pub fn Worker::new(Connection, WorkerOptions) -> Result[Self, TemporalError]
+pub fn Worker::poll_activity_task(Self, (Result[Bytes?, TemporalError]) -> Unit) -> Unit
+pub fn Worker::poll_activity_task_blocking(Self) -> Result[Bytes?, TemporalError]
+pub fn Worker::poll_nexus_task(Self, (Result[Bytes?, TemporalError]) -> Unit) -> Unit
+pub fn Worker::poll_nexus_task_blocking(Self) -> Result[Bytes?, TemporalError]
+pub fn Worker::poll_workflow_activation(Self, (Result[Bytes?, TemporalError]) -> Unit) -> Unit
+pub fn Worker::poll_workflow_activation_blocking(Self) -> Result[Bytes?, TemporalError]
+pub fn Worker::record_activity_heartbeat(Self, Bytes) -> Result[Unit, TemporalError]
+pub fn Worker::replace_client(Self, Connection) -> Result[Unit, TemporalError]
+pub fn Worker::request_workflow_eviction(Self, String) -> Unit
+pub fn Worker::validate(Self, (Result[Unit, TemporalError]) -> Unit) -> Unit
+pub fn Worker::validate_blocking(Self) -> Result[Unit, TemporalError]
+
+pub(all) struct WorkerOptions {
+  namespace_name : String
+  task_queue : String
+  build_id : String
+  identity_override : String
+  max_cached_workflows : UInt
+  workflow_slots : Int
+  activity_slots : Int
+  local_activity_slots : Int
+  nexus_slots : Int
+  task_types : WorkerTaskTypes
+  sticky_queue_schedule_to_start_timeout_millis : UInt64
+  max_heartbeat_throttle_interval_millis : UInt64
+  default_heartbeat_throttle_interval_millis : UInt64
+  max_activities_per_second : Double
+  max_task_queue_activities_per_second : Double
+  graceful_shutdown_period_millis : UInt64
+  workflow_task_poller_behavior : PollerBehavior
+  nonsticky_to_sticky_poll_ratio : Double
+  activity_task_poller_behavior : PollerBehavior
+  nexus_task_poller_behavior : PollerBehavior
+  nondeterminism_as_workflow_fail : Bool
+}
+pub fn WorkerOptions::new(String, String, build_id? : String, identity_override? : String, max_cached_workflows? : UInt, workflow_slots? : Int, activity_slots? : Int, local_activity_slots? : Int, nexus_slots? : Int, task_types? : WorkerTaskTypes, sticky_queue_schedule_to_start_timeout_millis? : UInt64, max_heartbeat_throttle_interval_millis? : UInt64, default_heartbeat_throttle_interval_millis? : UInt64, max_activities_per_second? : Double, max_task_queue_activities_per_second? : Double, graceful_shutdown_period_millis? : UInt64, workflow_task_poller_behavior? : PollerBehavior, nonsticky_to_sticky_poll_ratio? : Double, activity_task_poller_behavior? : PollerBehavior, nexus_task_poller_behavior? : PollerBehavior, nondeterminism_as_workflow_fail? : Bool) -> Self
+
+pub(all) struct WorkerTaskTypes {
+  enable_workflows : Bool
+  enable_local_activities : Bool
+  enable_remote_activities : Bool
+  enable_nexus : Bool
+} derive(Eq, @debug.Debug)
+pub fn WorkerTaskTypes::default() -> Self
+
+// Type aliases
+
+// Traits
+

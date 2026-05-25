@@ -1,0 +1,21 @@
+import {
+  "moonbitlang/core/encoding/utf8",
+}
+
+options(
+  "pre-build": [
+    {
+      "input": "vendor/temporal-sdk-core/VENDOR.stamp",
+      "output": "vendor/temporal-sdk-core/target/release/libtemporalio_sdk_core_c_bridge.a",
+      "command": "cargo build --manifest-path $mod_dir/vendor/temporal-sdk-core/Cargo.toml -p temporalio-sdk-core-c-bridge --release",
+    },
+  ],
+  "native-stub": [ "temporal_mbt_bridge.c" ],
+  targets: { "ffi.mbt": [ "native" ] },
+  link: {
+    "native": {
+      "stub-cc-flags": "-I./vendor/temporal-sdk-core/crates/sdk-core-c-bridge/include",
+      "cc-link-flags": "-L./vendor/temporal-sdk-core/target/release -ltemporalio_sdk_core_c_bridge -lgcc_s -lutil -lrt -lpthread -lm -ldl -lc",
+    },
+  },
+)

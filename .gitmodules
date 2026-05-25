@@ -1,0 +1,3 @@
+[submodule "temporal-sdk"]
+	path = temporal-sdk
+	url = https://github.com/temporalio/sdk-rust

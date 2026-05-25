@@ -1,0 +1,20 @@
+{
+  "source": "https://github.com/temporalio/sdk-rust",
+  "submodule": "temporal-sdk",
+  "commit": "96e0be0f1e55ea1ef6b626f83f58958c1879d111",
+  "generatedAt": "2026-05-25T16:51:08.210Z",
+  "packages": [
+    "crates/common",
+    "crates/client",
+    "crates/sdk-core",
+    "crates/macros",
+    "crates/sdk-core-c-bridge"
+  ],
+  "notes": [
+    "sdk-core-c-bridge is patched to build as a staticlib.",
+    "sdk-core-c-bridge build.rs is patched to avoid cbindgen during normal builds.",
+    "common/build.rs is patched to use generated/descriptors.bin unless TEMPORAL_MBT_VENDOR_GENERATE_DESCRIPTORS=1.",
+    "rust-toolchain.toml is intentionally omitted so normal builds use the caller's installed Rust toolchain.",
+    "lru and ringbuf are pinned to locally cached compatible versions for offline builds in this repository."
+  ]
+}
