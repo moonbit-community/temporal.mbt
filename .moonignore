@@ -1,0 +1,7 @@
+_build/
+.mooncakes/
+temporal-sdk/
+
+# Preserve the complete vendored snapshot, including its Cargo configuration.
+!vendor/temporal-sdk-core/**
+vendor/temporal-sdk-core/target/
