@@ -4,6 +4,11 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish the validated module to Mooncakes
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -31,3 +36,17 @@ jobs:
           moon version --all
           moon check --target native
           moon test --target native
+      - name: Validate the packaged module
+        run: python3 scripts/check_package.py
+      - name: Publish validated package
+        if: github.event_name == 'workflow_dispatch' && inputs.publish && github.ref == 'refs/heads/main'
+        env:
+          MOONCAKES_TOKEN: ${{ secrets.MOONCAKES_MOONBIT_COMMUNITY_TOKEN }}
+        run: |
+          if [ -z "$MOONCAKES_TOKEN" ]; then
+            echo 'The organization Mooncakes publishing secret is unavailable.' >&2
+            exit 1
+          fi
+          trap 'rm -f "$HOME/.moon/credentials.json"' EXIT
+          printf '%s' "$MOONCAKES_TOKEN" > "$HOME/.moon/credentials.json"
+          moon publish
