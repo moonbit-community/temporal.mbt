@@ -29,10 +29,13 @@ Normal package builds require:
 - MoonBit toolchain with native target support.
 - Rust/Cargo toolchain.
 - A C compiler and linker for MoonBit native stubs.
+- Protocol Buffers compiler (`protoc`), available on `PATH` or selected by `PROTOC`.
 
-Normal builds do not require Node.js, a checked-out Temporal SDK submodule, or a
-system `protoc`. The committed vendor snapshot includes the files needed by
-Cargo, including the generated protobuf descriptor set.
+Normal builds do not require Node.js or a checked-out Temporal SDK submodule.
+The committed vendor snapshot includes the generated Temporal protobuf descriptor
+set, but the transitive `prost-wkt-types` dependency still invokes `protoc` for its
+well-known types. On Debian or Ubuntu, install it with
+`sudo apt-get install protobuf-compiler`.
 
 The package pre-build hook in `moon.pkg` runs Cargo when the static library is
 missing or older than the vendor stamp:
